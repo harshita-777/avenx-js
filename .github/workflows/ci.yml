@@ -22,17 +22,3 @@ jobs:
 
       - name: run tests
         run: npm test
-
-  publish:
-    needs: test
-    if: github.event_name == 'release'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Code checkout
-        uses: actions/checkout@v4
-
-      - name: set up Node.js for npm deployment
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          registry-url: 'https://registry.npmjs.org/'

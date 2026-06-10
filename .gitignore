@@ -1,9 +1,14 @@
 # local dev files
 md/
-
 dev-notes/
+showcase/
 
 # documentation
 docs/
 
+# node & npm
+node_modules/
 .npmrc
+
+# editors
+.vscode/

@@ -1,5 +1,6 @@
 const assert = require('assert');
 const { AvenxComponent } = require('../../lib/core/runtime/AvenxComponent');
+const { ListManager } = require('../../lib/core/renderer/listManager');
 
 // ==========================================
 // 1. Lightweight Mock DOM & HTML Parser
@@ -484,6 +485,56 @@ global.Node = {
         assert.strictEqual(items[0].textContent, 'Charlie');
 
         console.log('  ✅ List Item Node Stability and In-place Patching tests passed!');
+
+        // ==========================================
+        // 3. Test event listener unbinding in ListManager
+        // ==========================================
+        console.log('🧪 Testing ListManager event unbinding on element removal...');
+
+        const mockEvaluator = {
+            evaluateExpression(expr, scope, state) {
+                return scope.items || [];
+            }
+        };
+
+        const mockRenderer = {
+            render(template, evalFn) {
+                return '<li>item</li>';
+            }
+        };
+
+        let unbindCalledWith = null;
+        const mockEventBinder = {
+            unbind(element) {
+                unbindCalledWith = element;
+            }
+        };
+
+        const listManager = new ListManager(mockEvaluator, mockRenderer, mockEventBinder);
+
+        // Create mock template and parent element
+        const templateEl = createMockElementNode('template', {
+            'data-ax-for': 'items',
+            'data-ax-as': 'item'
+        });
+        const parentEl = createMockElementNode('div', {}, [templateEl]);
+
+        // Mock nextElementSibling / siblings for getCurrentItems
+        const mockItem = createMockElementNode('li', {
+            'data-ax-list-item': '',
+            'data-ax-key-val': '0'
+        });
+        templateEl.after(mockItem);
+
+        // First update - contains key '0'
+        listManager.process(parentEl, { items: [{ id: 0 }] }, {});
+        assert.strictEqual(unbindCalledWith, null, 'Unbind should not be called when items are retained or added');
+
+        // Second update - items is empty, key '0' is removed
+        listManager.process(parentEl, { items: [] }, {});
+        assert.strictEqual(unbindCalledWith, mockItem, 'Unbind should be called with the removed element');
+
+        console.log('  ✅ ListManager event unbinding on element removal tests passed!');
     } catch (error) {
         console.error('❌ List Item Node Stability and In-place Patching tests failed!');
         console.error(error);

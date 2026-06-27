@@ -75,6 +75,55 @@ try {
     assert.strictEqual(executionCalls.length, 1, 'Should execute updated handler exactly once (no duplicates)');
     assert.strictEqual(executionCalls[0].expression, 'handleClick(2)', 'Should execute the updated handler expression');
 
+    // 7. Verify subtree traversal during unbind on Element (nodeType = 1)
+    const childListeners = [];
+    const childMock = {
+        nodeType: 1,
+        tagName: 'SPAN',
+        attributes: [
+            { name: '@click', value: 'childClick' }
+        ],
+        getAttribute(name) {
+            const attr = this.attributes.find(a => a.name === name);
+            return attr ? attr.value : null;
+        },
+        addEventListener(event, callback) {
+            childListeners.push({ event, callback });
+        },
+        removeEventListener(event, callback) {
+            const idx = childListeners.findIndex(l => l.event === event && l.callback === callback);
+            if (idx !== -1) {
+                childListeners.splice(idx, 1);
+            }
+        }
+    };
+
+    const parentMock = {
+        nodeType: 1,
+        tagName: 'DIV',
+        attributes: [],
+        childNodes: [childMock],
+        getAttribute(name) { return null; }
+    };
+    childMock.parentNode = parentMock;
+
+    const directBinder = new EventBinder();
+    
+    // Simulate direct binding using a DocumentFragment
+    const fragMock = {
+        nodeType: 11,
+        childNodes: [parentMock]
+    };
+    parentMock.parentNode = fragMock;
+
+    directBinder.bind(fragMock, dispatcher);
+    assert.strictEqual(childListeners.length, 1, 'Child should have 1 bound event listener');
+
+    // Call unbind on parentMock (nodeType = 1, i.e. Element)
+    // This should traverse parentMock and clean up childMock's direct event listeners
+    directBinder.unbind(parentMock);
+    assert.strictEqual(childListeners.length, 0, 'Child event listener should be removed when unbinding parent');
+
     console.log('  ✅ EventBinder duplicate listeners and leak prevention tests passed!');
 } catch (error) {
     console.error('❌ EventBinder duplicate listeners and leak prevention tests failed!');

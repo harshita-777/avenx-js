@@ -1,6 +1,6 @@
 ---
-title: "Component Structure"
-description: "Understand how Avenx Single File Components are structured with template, script, and style tags."
+title: 'Component Structure'
+description: 'Understand how Avenx Single File Components are structured with template, script, and style tags.'
 ---
 
 In Avenx-JS, a component is defined by two companion files in the same directory: `<name>.component.js` (logic and template) and `<name>.component.css` (styles).
@@ -21,13 +21,10 @@ The component file contains configuration tags at the top and the HTML template 
 
 <computed name="greeting" value="isLoggedIn ? 'Welcome back, ' + username : 'Hello, Guest!'" />
 
-<action name="login">
-    state.username = "Jane Doe";
-    state.isLoggedIn = true;
-</action>
+<action name="login"> state.username = "Jane Doe"; state.isLoggedIn = true; </action>
 
 <div class="greet-box">
-    <h3>{{ greeting }}</h3>
-    <button @click="login()">Log In</button>
+  <h3>{{ greeting }}</h3>
+  <button @click="login()">Log In</button>
 </div>
 ```

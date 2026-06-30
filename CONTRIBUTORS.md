@@ -38,6 +38,7 @@ Every contribution — whether code, documentation, or ideas — helps move the 
 Contributions are always welcome.
 
 **Check out:**
+
 - open issues
 - good first issues
 

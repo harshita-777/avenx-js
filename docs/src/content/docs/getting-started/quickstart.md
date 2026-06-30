@@ -1,6 +1,6 @@
 ---
-title: "Quick Start Tutorial"
-description: "Build your first reactive counter component with Avenx-JS in this quickstart tutorial."
+title: 'Quick Start Tutorial'
+description: 'Build your first reactive counter component with Avenx-JS in this quickstart tutorial.'
 ---
 
 Let's create a fully interactive Counter component in just a few minutes.
@@ -36,21 +36,17 @@ Open `src/components/counter/counter.component.js` and update it as follows:
 
 <computed name="doubleCount" value="count * 2" />
 
-<action name="increment">
-    state.count++;
-</action>
+<action name="increment"> state.count++; </action>
 
-<action name="decrement">
-    state.count--;
-</action>
+<action name="decrement"> state.count--; </action>
 
 <div class="counter-card">
-    <h2>{{ title }}</h2>
-    <p class="number">Value: {{ count }} (Double: {{ doubleCount }})</p>
-    <div class="buttons">
-        <button @click="decrement()">Minus</button>
-        <button @click="increment()">Plus</button>
-    </div>
+  <h2>{{ title }}</h2>
+  <p class="number">Value: {{ count }} (Double: {{ doubleCount }})</p>
+  <div class="buttons">
+    <button @click="decrement()">Minus</button>
+    <button @click="increment()">Plus</button>
+  </div>
 </div>
 ```
 

@@ -1,6 +1,6 @@
 ---
-title: "AvenxPage API"
-description: "API reference for AvenxPage, the specialized component class for views and routing."
+title: 'AvenxPage API'
+description: 'API reference for AvenxPage, the specialized component class for views and routing.'
 ---
 
 A specialized sub-class extending `AvenxComponent`. Pages represent root layouts in router configurations.

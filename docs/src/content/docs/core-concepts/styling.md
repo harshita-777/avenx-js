@@ -1,6 +1,6 @@
 ---
-title: "Scoped & Global CSS"
-description: "Master scoped styling and global styles inside Avenx-JS components."
+title: 'Scoped & Global CSS'
+description: 'Master scoped styling and global styles inside Avenx-JS components.'
 ---
 
 Styling is defined in the companion `.component.css` stylesheet. At compile-time, the Avenx compiler scopes component styles to keep them from bleeding into other views.
@@ -14,7 +14,7 @@ CSS rules defined inside `<@css>` use named blocks without dot prefixes. The com
     card {
         padding: 1.5rem;
         border: 1px solid #eee;
-        
+
         /* Pseudo-selectors must be nested inside the named block */
         &:hover {
             border-color: #6366f1;
@@ -22,6 +22,7 @@ CSS rules defined inside `<@css>` use named blocks without dot prefixes. The com
     }
 </@css>
 ```
+
 <div @css="card">
     <!-- Component Content -->
 </div>
@@ -34,7 +35,7 @@ Declare global styles or design token variables using the `<@global>` block. Use
 <@global>
     @def primary-color #6366f1;
     @def font-sans 'Inter', sans-serif;
-    
+
     body {
         margin: 0;
         font-family: @font-sans;

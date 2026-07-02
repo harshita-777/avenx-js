@@ -30,7 +30,7 @@ Every contribution — whether code, documentation, or ideas — helps move the 
 - [@vIktoiiaa](https://github.com/vIktoiiaa)
 - [@ramizqazi](https://github.com/ramizqazi)
 - [@Abhijay-29r](https://github.com/Abhijay-29r)
-- [@muskaan-2027](https://github.com/muskaan-2027)
+- [@muskaan-255](https://github.com/muskaan-255)
 
 ---
 

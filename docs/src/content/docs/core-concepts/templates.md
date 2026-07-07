@@ -1,19 +1,20 @@
 ---
+
 title: 'Templates & Slots'
 description: 'How slots, data-bindings, loops, and conditional templates work in Avenx-JS.'
----
+-------------------------------------------------------------------------------------------
 
 Avenx-JS provides a clean HTML-based template engine that supports text interpolation, HTML transclusion, two-way bindings, and loops.
 
 ## 1. Interpolation & HTML Escaping
 
-- **Escaped Text (`{{ expression }}`)**: Values are automatically passed through an HTML escaper to prevent Cross-Site Scripting (XSS).
+* **Escaped Text (`{{ expression }}`)**: Values are automatically passed through an HTML escaper to prevent Cross-Site Scripting (XSS).
 
 ```html
 <p>Hello {{ state.username }}</p>
 ```
 
-- **Raw HTML (`{{{ expression }}}`)**: Allows inserting unescaped HTML. Use this with caution.
+* **Raw HTML (`{{{ expression }}}`)**: Allows inserting unescaped HTML. Use this with caution.
 
 ```html
 <div>{{{ state.rawHtml }}}</div>
@@ -26,6 +27,20 @@ Form inputs (input, textarea, select) support two-way bindings via `data-ax-bind
 ```html
 <input type="text" data-ax-bind="state.username" />
 ```
+
+> **Warning:** `data-ax-bind` does not currently handle the boolean `checked` state of checkbox and radio inputs. Since the directive binds to the input's `value` and listens for `input` events, using it with checkboxes or radio buttons will not correctly update their checked state.
+
+For checkbox inputs, bind the `checked` attribute manually and listen for the `change` event:
+
+```html
+<input
+  type="checkbox"
+  checked="{{ state.checked }}"
+  @change="state.checked = event.target.checked"
+/>
+```
+
+This ensures that the checkbox's checked state is rendered from `state.checked` and that the state is updated whenever the checkbox changes.
 
 ## 3. Loops (`<@for>`)
 

@@ -11,6 +11,7 @@ Avenx-JS uses structured error codes starting with `AVX_C` for compiler errors a
 | ----------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | `[AVX_C01]` | Could not create dist directory at "{dir}".  | **Cause:** Write permission failure.<br />**Resolution:** Adjust your operating system directory write permissions.                       |
 | `[AVX_C02]` | "src" directory not found.                   | **Cause:** Running the build command outside of an Avenx project root.<br />**Resolution:** Run `npx avenx init` to set up the workspace. |
+| `[AVX_C03]` | Duplicate component name(s) detected. These files compile to the same class name: {details} | **Cause:** Two or more component files (e.g. `card.component.js` in different directories) resolve to the same generated class name, since Avenx-JS derives a component's class name from its file name. This causes a naming collision when the components are bundled together.<br />**Resolution:** Rename one of the conflicting files, or move it to a location that produces a distinct class name — for example, renaming `card.component.js` to `profile-card.component.js`. The build halts and lists every conflicting file path so you can identify exactly which components need to be renamed. |
 
 ## Compiler Warnings
 

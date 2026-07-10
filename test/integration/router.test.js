@@ -121,6 +121,8 @@ const { AvenxPage } = require('../../lib/core/runtime/AvenxPage');
     }
 
     app.initRouter({
+      '': 'TestPage',
+      '#': 'TestPage',
       '#/': 'TestPage',
       '#/items*': 'TestPage',
       '#/user/:userId': {

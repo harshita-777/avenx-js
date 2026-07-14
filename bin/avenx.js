@@ -854,8 +854,6 @@ class AvenxCLI {
       });
     });
 
-    server.listen(port, host, () => {
-      const url = `http://${host}:${port}`;
     server.on('error', (err) => {
       if (err.code === 'EADDRINUSE') {
         console.error(
@@ -868,8 +866,8 @@ class AvenxCLI {
       throw err;
     });
 
-    server.listen(port, () => {
-      const url = `http://localhost:${port}`;
+    server.listen(port, host, () => {
+      const url = `http://${host}:${port}`;
       console.log(`\n🚀 Dev-Server running at ${url}`);
       console.log(`👀 Watching for changes in ${this.config.srcDir}/...\n`);
       this.openBrowser(url);

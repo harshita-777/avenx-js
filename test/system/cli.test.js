@@ -6,7 +6,7 @@ const __dirname = dirname(__filename);
 import fs from 'fs';
 import path from 'path';
 import assert from 'assert';
-import { execSync, spawnSync } from 'child_process';
+import { execSync, spawnSync, spawn } from 'child_process';
 
 const TEST_DIR = path.join(__dirname, 'test-project');
 const BIN_PATH = path.join(__dirname, '../../bin/avenx.js');
@@ -45,7 +45,7 @@ function cleanup() {
 /**
  *
  */
-function runTest() {
+async function runTest() {
   console.log('🧪 Testing avenx init...');
 
   try {
@@ -486,6 +486,67 @@ function runTest() {
     assert.match(guardDestroyOutput, /✅ Guard 'AuthTestGuard' file deleted/, 'should log guard deletion');
 
     console.log('✅ Destroy command tests passed!');
+
+    // 7. Test watch command
+    console.log('🧪 Testing avenx watch...');
+    const watchProc = spawn(process.execPath, [BIN_PATH, 'watch'], {
+      cwd: TEST_DIR,
+    });
+
+    let watchOutput = '';
+    let resolveWatchReady;
+    const watchReadyPromise = new Promise((resolve) => {
+      resolveWatchReady = resolve;
+    });
+
+    let resolveRebuildDone;
+    const rebuildDonePromise = new Promise((resolve) => {
+      resolveRebuildDone = resolve;
+    });
+
+    watchProc.stdout.on('data', (data) => {
+      const chunk = data.toString('utf8');
+      watchOutput += chunk;
+
+      if (chunk.includes('Watching for changes')) {
+        resolveWatchReady();
+      }
+      if (chunk.includes('Change detected') || chunk.includes('Rebuilding') || chunk.includes('Build completed')) {
+        if (watchOutput.includes('Build completed')) {
+          resolveRebuildDone();
+        }
+      }
+    });
+
+    // Wait for the watcher to start
+    await watchReadyPromise;
+    console.log('  Watch process started and is ready.');
+
+    // Make a change to a file to trigger rebuild
+    const mainAppJsPath = path.join(TEST_DIR, 'src/main.app.js');
+    fs.appendFileSync(mainAppJsPath, '\n// Trigger watch change\n');
+
+    // Wait for rebuild to trigger and finish
+    await rebuildDonePromise;
+    console.log('  ✅ Rebuild was successfully triggered on change.');
+
+    // Stop the watcher by sending SIGINT (Ctrl+C)
+    watchProc.kill('SIGINT');
+
+    const exitPromise = new Promise((resolve) => {
+      watchProc.on('exit', (code, signal) => {
+        resolve({ code, signal });
+      });
+    });
+
+    const { code: exitCode, signal: exitSignal } = await exitPromise;
+    assert.ok(
+      exitCode === 0 || exitCode === null || exitSignal === 'SIGINT',
+      `watch command should exit with 0 or be terminated by SIGINT (code: ${exitCode}, signal: ${exitSignal})`
+    );
+    console.log('  ✅ watch command exited gracefully on SIGINT.');
+
+    console.log('✅ All watch command tests passed!');
   } catch (error) {
     console.error('❌ Test failed!');
     console.error(error);

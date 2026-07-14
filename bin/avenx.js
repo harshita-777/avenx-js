@@ -174,6 +174,16 @@ class AvenxCLI {
       case 'serve':
         this.serveProject(args[0] || process.env.PORT || this.config.server.port);
         break;
+      case 'watch':
+      case 'w':
+        console.log(`👀 Watching for changes in ${this.config.srcDir}/...\n`);
+        this.buildProject();
+        this.watchProject();
+        process.on('SIGINT', () => {
+          console.log('\nStopping watch...');
+          process.exit(0);
+        });
+        break;
       case 'help':
       default:
         this.printHelp();
@@ -931,6 +941,7 @@ class AvenxCLI {
   \x1b[32mclean\x1b[0m                     \x1b[90mClear build output directory\x1b[0m
   \x1b[32mcheck (lint)\x1b[0m              \x1b[90mValidate templates without building\x1b[0m
   \x1b[32mserve [port]\x1b[0m              \x1b[90mStart dev server with hot-reload (default: 3000)\x1b[0m
+  \x1b[32mwatch (w)\x1b[0m                 \x1b[90mWatch for file changes and rebuild automatically\x1b[0m
   \x1b[32mhelp\x1b[0m                      \x1b[90mShow this help message\x1b[0m
 
 \x1b[1;36mOptions:\x1b[0m

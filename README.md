@@ -190,7 +190,7 @@ const app = new AvenxApp({ target: '#app' });
 app.registerPage('Home', Home);
 app.registerPage('Profile', Profile);
 
-app.mount('Home'); // Initial page
+app.mountPage('Home'); // Initial page
 ```
 
 ---
@@ -232,6 +232,7 @@ To enable a preprocessor, add the `style` settings to your `avenx.config.json` f
 Available preprocessor options are `"sass"`, `"scss"`, `"postcss"`, and `"less"`.
 
 When a preprocessor is enabled:
+
 - You can write nested SCSS/Sass styles, variables, functions, and mixins directly inside your stylesheet.
 - The compiler will automatically run your styles through the preprocessor module before applying Avenx-JS scoping logic.
 - If the configured preprocessor package (e.g. `sass`) is not installed, the compiler gracefully falls back to raw CSS processing and logs a warning.
@@ -264,13 +265,27 @@ my-avenx-app/
 | Command                   | Description                                            |
 | :------------------------ | :----------------------------------------------------- |
 | `avenx init`              | Scaffolds a new project structure.                     |
-| `avenx g <name>`          | Generates a new component.                             |
-| `avenx g p <name>`        | Generates a new page for routing.                      |
+| `avenx g <name>`          | Generates a new component (alias: `generate`).         |
+| `avenx g p <name>`        | Generates a new page for routing (alias: `g page`).    |
 | `avenx g bridge <name>`   | Generates a new shared reactive bridge.                |
 | `avenx g guard <name>`    | Generates a new route guard.                           |
-| `avenx build`             | Compiles the project into `dist/`.                     |
+| `avenx d <name>`          | Deletes a component (alias: `destroy`).                |
+| `avenx d p <name>`        | Deletes a page (alias: `d page`).                      |
+| `avenx d bridge <name>`   | Deletes a shared reactive bridge.                      |
+| `avenx d guard <name>`    | Deletes a route guard.                                 |
+| `avenx build` (or `b`)    | Compiles the project into `dist/`.                     |
+| `avenx clean`             | Clears build output directory.                         |
 | `avenx check` (or `lint`) | Validates component templates without building.        |
 | `avenx serve [port]`      | Starts the dev server with hot-reload (default: 3000). |
+| `avenx watch` (or `w`)    | Watch for file changes and rebuild automatically.      |
+
+### Options
+
+| Option                | Description                                                                    |
+| :-------------------- | :----------------------------------------------------------------------------- |
+| `--dry-run`, `-d`     | Preview actions for generators and destructors without writing/deleting files. |
+| `--port`, `-p <port>` | Configure the port for the development server.                                 |
+| `--host`, `-h <host>` | Configure the host for the development server (default: `localhost`).          |
 
 ---
 

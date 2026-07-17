@@ -80,6 +80,9 @@ If you have questions or want to contribute, feel free to reach out.
       <td align="center" valign="top" width="14.28%"><a href="https://siddhant-gahlot.vercel.app/"><img src="https://avatars.githubusercontent.com/u/140417576?v=4?s=100" width="100px;" alt="Sid"/><br /><sub><b>Sid</b></sub></a><br /><a href="https://github.com/Avenx-JS/avenx-js/commits?author=sid0229" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/siddhisharma3671"><img src="https://avatars.githubusercontent.com/u/304835338?v=4?s=100" width="100px;" alt="siddhisharma3671"/><br /><sub><b>siddhisharma3671</b></sub></a><br /><a href="https://github.com/Avenx-JS/avenx-js/commits?author=siddhisharma3671" title="Documentation">📖</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/KaizokuHam"><img src="https://avatars.githubusercontent.com/u/304468983?v=4?s=100" width="100px;" alt="KaizokuHam"/><br /><sub><b>KaizokuHam</b></sub></a><br /><a href="https://github.com/Avenx-JS/avenx-js/commits?author=KaizokuHam" title="Documentation">📖</a></td>
+    </tr>
   </tbody>
 </table>
 

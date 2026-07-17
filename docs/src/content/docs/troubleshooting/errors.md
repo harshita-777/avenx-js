@@ -216,6 +216,68 @@ users.map(user => (
 ```
 
 > **Note:** When duplicate keys are detected, Avenx automatically appends the item's index to the duplicate key so rendering can continue. This is a fallback mechanism and should not be relied upon as a substitute for stable, unique keys.
+
+### AVX_W21 — DIRECTIVE_HTML_EVALUATION_FAILED
+
+**Warning Message**
+Failed to evaluate data-ax-html: {0}. Error: {1}
+
+**Cause:** This warning is emitted at runtime when Avenx-JS attempts to evaluate the expression bound to a `data-ax-html="..."` directive, but the expression throws an exception during evaluation. Since `data-ax-html` injects raw HTML directly into the DOM, any error in the underlying expression — such as referencing an undefined variable, calling a method that doesn't exist, or a malformed expression — prevents the directive from resolving to a valid HTML string.
+
+This typically happens for a few common reasons:
+
+- The bound expression references a variable or property that is `undefined` or `null` at the time of evaluation.
+- A method called within the expression throws internally (e.g. a formatting or sanitization helper failing on unexpected input).
+- Asynchronous data the expression depends on hasn't loaded yet.
+- A typo or syntax error in the expression itself.
+
+**Resolution:** To resolve this warning:
+
+1. Ensure the variable or property bound to `data-ax-html` is declared and initialized before the directive evaluates.
+2. Guard against `undefined`/`null` values with a fallback, e.g. an empty string.
+3. Wrap any custom formatting or sanitization logic in a `try...catch` so failures degrade gracefully instead of throwing during evaluation.
+4. If the HTML content depends on asynchronous data, initialize the bound property with a safe default (empty string) until the data has loaded.
+5. Avoid embedding complex logic directly in the `data-ax-html` expression — compute the HTML string in a `computed` property instead, where it's easier to test and guard.
+
+**Incorrect**
+
+```javascript
+const state = {};
+```
+
+```html
+<div data-ax-html="state.description.toUpperCase()"></div>
+```
+
+Since `state.description` is `undefined`, calling `.toUpperCase()` on it throws, and the directive fails to evaluate.
+
+**Correct**
+
+```javascript
+const state = {
+  description: ''
+};
+```
+
+```html
+<div data-ax-html="state.description"></div>
+```
+
+**Defensive Example**
+
+```javascript
+const computed = {
+  safeDescription() {
+    return typeof state.description === 'string' ? state.description : '';
+  }
+};
+```
+
+```html
+<div data-ax-html="computed.safeDescription"></div>
+```
+
+Deriving the value through a guarded `computed` property ensures `data-ax-html` always receives a valid string and prevents evaluation failures.
 ## Compiler Warnings
 
 ### Undeclared Variable or Method Warning

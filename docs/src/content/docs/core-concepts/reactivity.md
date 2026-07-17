@@ -63,6 +63,19 @@ Because updates are queued and processed asynchronously, multiple synchronous st
 
 ### Troubleshooting `AVX_R11`
 
+#### Troubleshooting `AVX_W11`
+
+The `AVX_W11` (`ROUTE_TITLE_EVALUATION_FAILED`) warning occurs when a dynamic route `title` function throws an error while evaluating the route parameters.
+
+For example, this route can trigger the warning if `params.id` is accessed through code that throws an error:
+
+````javascript
+app.initRouter({
+  '/profile/:id': {
+    page: 'Profile',
+    title: (params) => getProfileTitle(params.id),
+  },
+});
 The `AVX_R11` (`STATE_MUTATION_IN_UPDATE`) error occurs when state is mutated synchronously while Avenx-JS is already processing an update.
 
 This can happen when state is modified from code that runs as part of rendering, such as a computed property or template expression. Updating state during this phase can schedule another update before the current update has finished, potentially creating an infinite rendering loop.
@@ -74,7 +87,7 @@ get displayName() {
   state.name = state.name.trim(); // Avoid: mutates state during an update
   return state.name;
 }
-```
+````
 
 Instead, computed getters should derive and return values without modifying state:
 
